@@ -1,0 +1,11 @@
+EXP-013 Static Obstacle Detour Metrics
+=======================================
+Waypoint count: 3
+Success count: 3
+Average final error: 21.599 mm
+Maximum final error: 23.233 mm
+Goal tolerance: 25.0 mm
+Total route path length: 12.239 m
+Total execution time: 95.72 s
+
+Experiment type: predefined waypoint detour in a static obstacle world; not autonomous obstacle detection or online path planning.

@@ -36,6 +36,12 @@ constexpr double kTurnGain = 1.50;
 constexpr double kForwardYawGain = 1.20;
 constexpr double kForwardMaxAngularSpeed = 0.35;
 
+/*
+ * EXP-013 uses longer obstacle-detour segments.
+ * Keep a safety timeout, but allow enough time for long global waypoints.
+ */
+constexpr double kWaypointTimeoutSec = 70.0;
+
 struct Waypoint
 {
   std::string name;
@@ -330,7 +336,7 @@ WaypointResult NavigateToWaypoint(
     const double route_elapsed =
       std::chrono::duration<double>(now - route_start).count();
 
-    if (waypoint_duration > 35.0)
+    if (waypoint_duration > kWaypointTimeoutSec)
     {
       PublishStop(publisher);
 
@@ -637,7 +643,7 @@ int main(int argc, char **argv)
       << "final_error_m,duration_sec,status\n";
 
     std::cout << "\n============================================\n";
-    std::cout << "EXP-012 全局路线执行结果\n";
+    std::cout << "全局路线执行结果\n";
 
     for (const auto &result : results)
     {

@@ -213,10 +213,10 @@ All four waypoints reached the specified stopping tolerance.
 ![Multi-waypoint route overview](outputs/exp011_waypoint_route_v1/summary/waypoint_route_overview.png)
 
 <!-- EXP012_START -->
-## EXP-012: CSV-Driven Global Coordinate Route
+## EXP-012: CSV-Driven Fixed Odom-Frame Route
 
 This experiment upgrades the route interface from relative motion commands
-to a CSV-defined sequence of fixed world-coordinate waypoints.
+to a CSV-defined sequence of fixed odometry-frame waypoints.
 
 The C++ controller loads the entire route in one process and uses odometry
 feedback to repeatedly align, move, correct heading, and stop at each target.
@@ -236,18 +236,60 @@ Route summary:
     Goal tolerance: 25 mm
     Total execution time: 40.39 s
 
-This is pre-defined global-coordinate waypoint execution, not yet
+Coordinate frame: all EXP-012 route targets are expressed in `vehicle_blue/odom`, initialized when the simulator starts.
+
+This is pre-defined fixed odometry-frame waypoint execution, not yet
 map-based global path planning or obstacle-aware navigation.
 
-### Global Route Waypoint Error
+### Fixed Odom-Frame Route Waypoint Error
 
 ![EXP-012 waypoint error](outputs/exp012_global_rectangle_v1/summary/global_route_error_comparison.png)
 
-### Global Coordinate Route Overview
+### Fixed Odom-Frame Route Overview
 
 ![EXP-012 global route overview](outputs/exp012_global_rectangle_v1/summary/global_route_overview.png)
 
 <!-- EXP012_END -->
+
+<!-- EXP013_START -->
+## EXP-013: Static-Obstacle Detour in a Fixed Odom Frame
+
+A custom Gazebo world was created with a static rectangular obstacle.
+The controller executed a predefined fixed odometry-frame waypoint route
+that moved above the obstacle, crossed to its right side, and reached the
+final target region.
+
+The route is expressed in `vehicle_blue/odom`, not Gazebo absolute world
+coordinates. The obstacle world pose was converted into the same odometry
+frame for consistent visualization.
+
+| Waypoint | Odom-frame target | Final error | Duration | Status |
+|---|---:|---:|---:|---|
+| wp01_move_north | (0.00, 4.40) | 21.46 mm | 33.83 s | success |
+| wp02_pass_above_obstacle | (5.50, 4.40) | 23.23 mm | 40.47 s | success |
+| wp03_goal_right | (5.50, 2.00) | 20.10 mm | 21.42 s | success |
+
+Detour-route summary:
+
+    Success rate: 3 / 3
+    Average final waypoint error: 21.60 mm
+    Maximum final waypoint error: 23.23 mm
+    Goal tolerance: 25 mm
+    Total execution time: 95.72 s
+
+This experiment demonstrates predefined waypoint detour execution in a
+static-obstacle environment. It does not yet include obstacle sensing,
+automatic path search, online replanning, or autonomous collision avoidance.
+
+### Static-Obstacle Detour Error
+
+![EXP-013 obstacle detour error](outputs/exp013_static_obstacle_detour_v1/summary/obstacle_detour_error_comparison.png)
+
+### Fixed Odom-Frame Detour Route
+
+![EXP-013 obstacle detour route](outputs/exp013_static_obstacle_detour_v1/summary/obstacle_detour_route_overview.png)
+
+<!-- EXP013_END -->
 
 ## Current Limitations and Next Steps
 

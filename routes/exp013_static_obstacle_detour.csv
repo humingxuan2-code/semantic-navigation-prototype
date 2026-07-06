@@ -1,0 +1,4 @@
+waypoint_name,target_x,target_y
+wp01_move_north,0.00,4.40
+wp02_pass_above_obstacle,5.50,4.40
+wp03_goal_right,5.50,2.00

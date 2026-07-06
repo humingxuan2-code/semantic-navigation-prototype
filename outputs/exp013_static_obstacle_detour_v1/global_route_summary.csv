@@ -1,0 +1,4 @@
+waypoint_name,target_x,target_y,start_x,start_y,end_x,end_y,final_error_m,duration_sec,status
+wp01_move_north,0.000000,4.400000,0.000000,0.000000,0.000041,4.378541,0.021459,33.830645,success
+wp02_pass_above_obstacle,5.500000,4.400000,0.000041,4.378541,5.476767,4.399976,0.023233,40.466256,success
+wp03_goal_right,5.500000,2.000000,5.476767,4.399976,5.499963,2.020104,0.020104,21.424644,success

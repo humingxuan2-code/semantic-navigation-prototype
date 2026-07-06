@@ -957,6 +957,93 @@ CSV 记录字段：
 
 ---
 
+### EXP-013：静态障碍物场景下的固定 Odom 坐标绕行路线执行
+
+实验目标：
+
+- 在自定义 Gazebo 世界中加入静态长方体障碍物；
+- 基于 `vehicle_blue/odom` 的固定坐标航点执行绕行路线；
+- 验证机器人能够沿预定义路线从障碍物上方通过，并到达右侧目标区域；
+- 保存路线汇总、误差统计和带障碍物标注的轨迹图；
+- 明确区分“预定义绕行路线执行”与“自动避障 / 自动路径规划”。
+
+自定义世界文件：
+
+`~/semantic_nav_ws/worlds/exp013_obstacle_world.sdf`
+
+静态障碍物参数：
+
+- world 坐标中心：`(3.5, 2.0)`；
+- 障碍物尺寸：`1.4 m × 1.6 m × 1.0 m`；
+- 蓝车初始 world 坐标：`(0.0, 2.0)`；
+- 蓝车 odometry 起点：`(0.0, 0.0)`；
+- 因此，在 `vehicle_blue/odom` 坐标系中，障碍物中心为：`(3.5, 0.0)`。
+
+路线文件：
+
+`~/semantic_nav_ws/routes/exp013_static_obstacle_detour.csv`
+
+路线控制器：
+
+`~/semantic_nav_ws/tools/drive_blue_global_route.cpp`
+
+路线可视化脚本：
+
+`~/semantic_nav_ws/tools/plot_obstacle_route.py`
+
+固定 odometry 坐标绕行路线：
+
+1. `wp01_move_north`：`(0.0, 4.4)`，先向上远离障碍物；
+2. `wp02_pass_above_obstacle`：`(5.5, 4.4)`，从障碍物上方横向通过；
+3. `wp03_goal_right`：`(5.5, 2.0)`，沿障碍物右侧下行至目标区域。
+
+控制器调整记录：
+
+- 首次运行中，第二段横向路径较长，在原有单航点 `35 s` 安全超时限制下未能完成；
+- 控制器保留安全超时机制，并将单航点超时调整为 `70 s`；
+- 调整后重新启动仿真世界并执行完整路线。
+
+结果目录：
+
+`~/semantic_nav_ws/outputs/exp013_static_obstacle_detour_v1/`
+
+核心输出文件：
+
+- `global_route_summary.csv`：各航点最终误差、执行时长和状态；
+- `summary/obstacle_detour_route_overview.png`：带静态障碍物区域的固定 odometry 坐标路线图；
+- `summary/obstacle_detour_error_comparison.png`：各航点最终误差与 25 mm 停止阈值对比图；
+- `summary/obstacle_detour_metrics.txt`：整体指标汇总。
+
+实验结果：
+
+| 航点 | Odom 坐标目标 | 最终误差 | 执行时长 | 状态 |
+|---|---:|---:|---:|---|
+| wp01_move_north | (0.0, 4.4) | 21.46 mm | 33.83 s | success |
+| wp02_pass_above_obstacle | (5.5, 4.4) | 23.23 mm | 40.47 s | success |
+| wp03_goal_right | (5.5, 2.0) | 20.10 mm | 21.42 s | success |
+
+汇总指标：
+
+- 航点成功率：3 / 3；
+- 平均最终误差：21.60 mm；
+- 最大最终误差：23.23 mm；
+- 目标停止阈值：25 mm；
+- 总执行时间：95.57 s；
+- 所有航点均进入停止阈值并完成稳定停车。
+
+结论：
+
+通过。
+
+蓝车已能够在包含静态障碍物的自定义 Gazebo 世界中，
+读取固定 odometry 坐标系下的预定义航点路线，
+先从障碍物上方绕行，再到达其右侧目标区域。
+
+本实验属于“静态障碍物场景下的预定义绕行路线执行”。
+当前系统尚未实现障碍物感知、自动路径搜索、在线重规划或自主避障；
+后续可在此基础上加入栅格地图、A* 路径规划、LiDAR 感知或 Nav2。
+
+---
 
 ## 十四、当前限制
 
