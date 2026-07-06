@@ -1,0 +1,7 @@
+case_name,forward_m,left_m
+case01_straight_030,0.30,0.00
+case02_left_030_020,0.30,0.20
+case03_right_030_020,0.30,-0.20
+case04_straight_050,0.50,0.00
+case05_left_040_030,0.40,0.30
+case06_right_040_030,0.40,-0.30

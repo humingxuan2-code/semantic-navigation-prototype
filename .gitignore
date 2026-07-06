@@ -1,0 +1,28 @@
+# ROS 2 / colcon generated files
+build/
+install/
+log/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Compiled C++ executables
+tools/drive_blue_cpp
+tools/drive_blue_distance
+tools/drive_blue_distance_slow
+tools/drive_blue_goto
+tools/drive_blue_goto_trace
+tools/drive_blue_yaw
+
+# Temporary latest-run outputs
+tools/trajectory_latest.csv
+tools/trajectory_latest.png
+
+# Raw benchmark traces can be regenerated
+outputs/benchmark_rel_v1/case*/
+
+# Temporary benchmark console / plotting output
+outputs/**/terminal_output.txt
+outputs/**/plot_output.txt
+tools/drive_blue.sh.disabled
