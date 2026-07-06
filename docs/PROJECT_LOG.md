@@ -954,6 +954,7 @@ CSV 记录字段：
 ~/semantic_nav_ws/tools/drive_blue_global_route \
 ~/semantic_nav_ws/routes/exp012_global_rectangle.csv \
 ~/semantic_nav_ws/outputs/exp012_global_rectangle_v1
+'''
 
 ---
 
@@ -1047,13 +1048,13 @@ CSV 记录字段：
 
 ## 十四、当前限制
 
-1. ROS-Gazebo bridge 跨终端发现不稳定；
-2. 当前稳定路径是 Gazebo Transport，不是 ROS topic；
-3. 90° 转向目前仍基于固定时间；
-4. 尚未实现由 quaternion / yaw 驱动的闭环角度控制；
-5. 尚未实现前往指定 `(x, y)` 目标点；
-6. 尚未把轨迹导出为 CSV；
-7. 尚未实现避障、地图、视觉、语言或语义理解。
+1. ROS-Gazebo bridge 在当前 WSL 环境中的跨终端发现仍不稳定；
+2. 当前稳定控制路径使用 Gazebo Transport，尚未改造成 ROS 2 原生 `rclcpp` 控制节点；
+3. 当前路线目标使用 `vehicle_blue/odom` 固定坐标系；仿真重启后 odom 原点会重置，尚未接入全局地图或定位系统；
+4. 静态障碍物实验使用预定义绕行航点，尚未实现基于传感器的障碍物检测；
+5. 尚未实现 A*、Dijkstra、Nav2 等自动路径搜索与在线重规划；
+6. 尚未接入 LiDAR、深度相机、视觉感知或多模态传感器；
+7. 尚未实现语言指令解析、场景语义理解或 VLA 决策模块。
 
 ---
 
