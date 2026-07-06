@@ -1,0 +1,5 @@
+waypoint_name,forward_m,left_m
+wp01_forward_035,0.35,0.00
+wp02_left_035,0.00,0.35
+wp03_forward_035,0.35,0.00
+wp04_right_035,0.00,-0.35

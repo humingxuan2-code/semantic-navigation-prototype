@@ -26,3 +26,4 @@ outputs/benchmark_rel_v1/case*/
 outputs/**/terminal_output.txt
 outputs/**/plot_output.txt
 tools/drive_blue.sh.disabled
+outputs/exp011_waypoint_route_v1/wp*/

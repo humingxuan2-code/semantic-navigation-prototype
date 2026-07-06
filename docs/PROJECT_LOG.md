@@ -847,6 +847,69 @@ CSV 记录字段：
 
 ---
 
+### EXP-011：多航点路线导航与全局轨迹可视化
+
+实验目标：
+
+- 在一次连续任务中依次执行多个相对航点；
+- 复用已验证的闭环单点导航控制器；
+- 为每个航点保存独立轨迹、终端输出和最终误差；
+- 将多个航点的轨迹拼接为完整路线总览图；
+- 验证控制器在连续任务中的稳定性。
+
+路线执行脚本：
+
+    ~/semantic_nav_ws/tools/run_waypoint_route.sh
+
+路线汇总脚本：
+
+    ~/semantic_nav_ws/tools/summarize_waypoint_route.py
+
+实验路线：
+
+1. WP1：前方 0.35 m，左侧 0.00 m
+2. WP2：前方 0.00 m，左侧 0.35 m
+3. WP3：前方 0.35 m，左侧 0.00 m
+4. WP4：前方 0.00 m，右侧 0.35 m
+
+实验结果目录：
+
+    ~/semantic_nav_ws/outputs/exp011_waypoint_route_v1/
+
+每个航点保存：
+
+    trajectory.csv
+    trajectory.png
+    terminal_output.txt
+    plot_output.txt
+
+汇总文件：
+
+    ~/semantic_nav_ws/outputs/exp011_waypoint_route_v1/summary/waypoint_summary.csv
+    ~/semantic_nav_ws/outputs/exp011_waypoint_route_v1/summary/waypoint_error_comparison.png
+    ~/semantic_nav_ws/outputs/exp011_waypoint_route_v1/summary/waypoint_route_overview.png
+
+结果分析：
+
+- WP1 最终误差约为 10.5 mm；
+- WP2 最终误差约为 5.7 mm；
+- WP3 最终误差约为 10.8 mm；
+- WP4 最终误差约为 8.0 mm；
+- 四个航点均进入 25 mm 的目标停止阈值；
+- 多航点路线图显示机器人依次完成右移、上移、继续前进和右移任务；
+- 每段导航均基于 odometry 反馈进行朝向修正、前进和最终停车。
+
+结论：
+
+通过。
+
+系统已能够将闭环单点导航控制器用于连续多航点任务，
+并在每个航点自动完成目标坐标计算、朝向调整、位置修正和稳定停车。
+同时，系统能够保存分段轨迹并生成多航点路线总览图，
+为后续航点序列规划、障碍物地图和语义导航扩展提供基础。
+
+---
+
 ## 十三、当前能力
 
 ```text

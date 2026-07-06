@@ -182,6 +182,36 @@ Examples:
     ~/semantic_nav_ws/tools/run_navigation_benchmark.sh
     python3 ~/semantic_nav_ws/tools/summarize_benchmark.py
 
+## EXP-011: Multi-Waypoint Route Execution
+
+The verified closed-loop point-to-point controller was reused as a
+single-waypoint executor and scheduled sequentially to complete a
+four-waypoint route. Each segment used odometry feedback to align,
+move, correct heading, and stop within the goal tolerance.
+
+| Waypoint | Relative target | Final error |
+|---|---|---:|
+| wp01_forward_035 | forward 0.35 m | 10.55 mm |
+| wp02_left_035 | forward 0.00 m, left 0.35 m | 5.68 mm |
+| wp03_forward_035 | forward 0.35 m | 10.80 mm |
+| wp04_right_035 | forward 0.00 m, right 0.35 m | 8.00 mm |
+
+Waypoint-route summary:
+
+    Average final waypoint error: 8.76 mm
+    Maximum final waypoint error: 10.80 mm
+    Goal tolerance: 25 mm
+
+All four waypoints reached the specified stopping tolerance.
+
+### Waypoint Error Comparison
+
+![Waypoint error comparison](outputs/exp011_waypoint_route_v1/summary/waypoint_error_comparison.png)
+
+### Multi-Waypoint Route Overview
+
+![Multi-waypoint route overview](outputs/exp011_waypoint_route_v1/summary/waypoint_route_overview.png)
+
 ## Current Limitations and Next Steps
 
 The current benchmark is a continuous relative-navigation test, meaning that each case starts from the previous case's final pose. Future work includes:
