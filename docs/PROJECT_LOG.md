@@ -910,26 +910,6 @@ CSV 记录字段：
 
 ---
 
-## 十三、当前能力
-
-```text
-[完成] WSL2 + Ubuntu 22.04.5
-[完成] ROS 2 Humble 基础通信
-[完成] Gazebo Fortress 差速车仿真
-[完成] Gazebo Transport 直接控制
-[完成] C++ 持久 Publisher
-[完成] 前进后的可靠停止
-[完成] 原地左转 / 右转
-[完成] 固定 L 形路线
-[完成] odometry 读取
-[完成] 基础闭环距离控制
-[完成] 比例减速闭环距离控制
-[完成] 0.500 m 目标下 0.498 m 实际位移
-[完成] 绝对误差 0.002 m
-```
-
----
-
 ### EXP-012：CSV 驱动的全局坐标多航点路线执行
 
 实验目标：
@@ -954,7 +934,7 @@ CSV 记录字段：
 ~/semantic_nav_ws/tools/drive_blue_global_route \
 ~/semantic_nav_ws/routes/exp012_global_rectangle.csv \
 ~/semantic_nav_ws/outputs/exp012_global_rectangle_v1
-'''
+```
 
 ---
 
@@ -1058,6 +1038,27 @@ CSV 记录字段：
 
 ---
 
+## 十五、当前能力
+
+```text
+
+[完成] WSL2 + Ubuntu 22.04.5 开发环境；
+[完成] ROS 2 Humble 基础发布订阅通信；
+[完成] Gazebo Fortress 差速车仿真；
+[完成] Gazebo Transport 直接速度控制；
+[完成] C++ 持久 Publisher 与可靠停车；
+[完成] odometry 的 x、y、quaternion 与 yaw 读取；
+[完成] 闭环距离控制与比例减速；
+[完成] 基于 yaw 的闭环左转和右转；
+[完成] 相对坐标单点导航；
+[完成] 连续相对航点路线执行与轨迹可视化；
+[完成] CSV 驱动的固定 odometry 坐标多航点路线；
+[完成] 自定义静态障碍物 Gazebo world；
+[完成] 静态障碍物场景下的预定义绕行路线；
+[完成] 轨迹 CSV、航点汇总 CSV、误差图与路线图输出。
+```
+
+---
 
 ## 十六、常用复现命令
 
