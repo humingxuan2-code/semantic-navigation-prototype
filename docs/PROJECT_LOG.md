@@ -930,6 +930,34 @@ CSV 记录字段：
 
 ---
 
+### EXP-012：CSV 驱动的全局坐标多航点路线执行
+
+实验目标：
+
+- 从 CSV 路线文件读取固定世界坐标航点；
+- 在单个 C++ 控制器进程中连续执行整条全局路线；
+- 基于 odometry 的 x、y 和 yaw 反馈完成转向、前进、朝向修正和停车；
+- 输出统一的全局轨迹 CSV、航点汇总 CSV、路线图和误差图；
+- 验证控制器在全局坐标航点序列中的稳定性。
+
+路线文件：
+
+`~/semantic_nav_ws/routes/exp012_global_rectangle.csv`
+
+全局路线控制器：
+
+`~/semantic_nav_ws/tools/drive_blue_global_route.cpp`
+
+路线执行命令：
+
+```bash
+~/semantic_nav_ws/tools/drive_blue_global_route \
+~/semantic_nav_ws/routes/exp012_global_rectangle.csv \
+~/semantic_nav_ws/outputs/exp012_global_rectangle_v1
+
+---
+
+
 ## 十四、当前限制
 
 1. ROS-Gazebo bridge 跨终端发现不稳定；

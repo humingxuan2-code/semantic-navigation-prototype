@@ -27,3 +27,6 @@ outputs/**/terminal_output.txt
 outputs/**/plot_output.txt
 tools/drive_blue.sh.disabled
 outputs/exp011_waypoint_route_v1/wp*/
+tools/drive_blue_global_route
+outputs/exp012_global_rectangle_v1/global_route_trajectory.csv
+outputs/exp012_global_rectangle_v1/terminal_output.txt

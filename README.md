@@ -212,6 +212,43 @@ All four waypoints reached the specified stopping tolerance.
 
 ![Multi-waypoint route overview](outputs/exp011_waypoint_route_v1/summary/waypoint_route_overview.png)
 
+<!-- EXP012_START -->
+## EXP-012: CSV-Driven Global Coordinate Route
+
+This experiment upgrades the route interface from relative motion commands
+to a CSV-defined sequence of fixed world-coordinate waypoints.
+
+The C++ controller loads the entire route in one process and uses odometry
+feedback to repeatedly align, move, correct heading, and stop at each target.
+
+| Waypoint | Target coordinate | Final error | Duration | Status |
+|---|---:|---:|---:|---|
+| wp01_north | (0.70, 1.00) | 3.55 mm | 9.00 s | success |
+| wp02_west | (0.35, 1.00) | 9.26 mm | 10.46 s | success |
+| wp03_south | (0.35, 0.65) | 7.91 mm | 10.45 s | success |
+| wp04_east | (0.70, 0.65) | 13.74 mm | 10.47 s | success |
+
+Route summary:
+
+    Success rate: 4 / 4
+    Average final waypoint error: 8.62 mm
+    Maximum final waypoint error: 13.74 mm
+    Goal tolerance: 25 mm
+    Total execution time: 40.39 s
+
+This is pre-defined global-coordinate waypoint execution, not yet
+map-based global path planning or obstacle-aware navigation.
+
+### Global Route Waypoint Error
+
+![EXP-012 waypoint error](outputs/exp012_global_rectangle_v1/summary/global_route_error_comparison.png)
+
+### Global Coordinate Route Overview
+
+![EXP-012 global route overview](outputs/exp012_global_rectangle_v1/summary/global_route_overview.png)
+
+<!-- EXP012_END -->
+
 ## Current Limitations and Next Steps
 
 The current benchmark is a continuous relative-navigation test, meaning that each case starts from the previous case's final pose. Future work includes:

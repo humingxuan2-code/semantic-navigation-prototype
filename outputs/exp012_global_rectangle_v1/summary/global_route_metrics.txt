@@ -1,0 +1,8 @@
+EXP-012 Global Route Metrics
+============================
+Waypoint count: 4
+Success count: 4
+Average final error: 8.615 mm
+Maximum final error: 13.743 mm
+Total route path length: 1.362 m
+Total execution time: 40.39 s
