@@ -1,0 +1,12 @@
+EXP-014 A* known-map obstacle detour planning
+start: (0.0, 0.0)
+goal: (5.8, 2.0)
+grid resolution: 0.10 m
+safety margin: 1.45 m
+full A* path points: 69
+simplified waypoint count including start: 10
+controller waypoint count: 9
+full path length: 7.463 m
+simplified path length: 7.215 m
+route csv: /home/openclaw/semantic_nav_ws/routes/exp014_astar_obstacle_detour_v2.csv
+plot: /home/openclaw/semantic_nav_ws/outputs/exp014_astar_planning_v2/summary/astar_obstacle_route.png

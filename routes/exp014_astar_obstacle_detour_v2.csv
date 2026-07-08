@@ -1,0 +1,10 @@
+waypoint_name,target_x,target_y
+astar_wp01,0.700,0.800
+astar_wp02,1.300,1.600
+astar_wp03,1.500,2.300
+astar_wp04,2.300,2.300
+astar_wp05,3.100,2.300
+astar_wp06,3.900,2.300
+astar_wp07,4.700,2.300
+astar_wp08,5.500,2.300
+astar_goal,5.800,2.000

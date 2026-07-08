@@ -1040,6 +1040,102 @@ CSV 记录字段：
 
 ---
 
+### EXP-014：已知静态障碍物地图下的 A* 路径规划与安全膨胀绕行
+
+实验目标：
+
+- 在已知静态障碍物位置的前提下，使用 A* 自动生成绕行路线；
+- 将 A* 栅格路径简化为可由现有 C++ 航点控制器执行的 odometry-frame 航点 CSV；
+- 对比点机器人 A* 简化路线与加入安全膨胀、中间航点后的执行效果；
+- 验证机器人能否在静态障碍物场景中安全绕行并到达目标点；
+- 明确区分“已知地图路径规划”与“基于传感器的实时避障”。
+
+规划脚本：
+
+`~/semantic_nav_ws/tools/plan_astar_obstacle_route.py`
+
+V2 规划脚本：
+
+`~/semantic_nav_ws/tools/plan_astar_obstacle_route_v2.py`
+
+对比总结脚本：
+
+`~/semantic_nav_ws/tools/summarize_exp014_astar.py`
+
+V1 路线文件：
+
+`~/semantic_nav_ws/routes/exp014_astar_obstacle_detour.csv`
+
+V2 路线文件：
+
+`~/semantic_nav_ws/routes/exp014_astar_obstacle_detour_v2.csv`
+
+V1 结果：
+
+- A* 规划成功；
+- 控制器航点数：2；
+- 航点成功率：2 / 2；
+- 最大最终误差：24.46 mm；
+- 平均最终误差：18.69 mm；
+- 执行轨迹长度：6.051 m；
+- 定性观察：机器人能够到达目标点，但车身和轮子经过障碍物附近时距离过近，存在明显碰撞风险；
+- 问题原因：V1 将机器人近似为点机器人，并且路径简化过度，只保留了过少中间航点。
+
+V2 调整：
+
+- 将规划安全膨胀半径增大到 `1.45 m`；
+- 保留更多 A* 中间航点，避免长直线段贴近障碍物；
+- 将最终目标调整为障碍物右侧更安全的目标区域；
+- 重新启动 Gazebo 世界，从初始位姿重新执行路线。
+
+V2 结果：
+
+| 航点 | Odom 坐标目标 | 最终误差 | 状态 |
+|---|---:|---:|---|
+| astar_wp01 | (0.70, 0.80) | 3.97 mm | success |
+| astar_wp02 | (1.30, 1.60) | 16.48 mm | success |
+| astar_wp03 | (1.50, 2.30) | 15.66 mm | success |
+| astar_wp04 | (2.30, 2.30) | 20.53 mm | success |
+| astar_wp05 | (3.10, 2.30) | 18.39 mm | success |
+| astar_wp06 | (3.90, 2.30) | 18.50 mm | success |
+| astar_wp07 | (4.70, 2.30) | 16.44 mm | success |
+| astar_wp08 | (5.50, 2.30) | 14.95 mm | success |
+| astar_goal | (5.80, 2.00) | 22.10 mm | success |
+
+V2 汇总指标：
+
+- 航点成功率：9 / 9；
+- 最大最终误差：22.10 mm；
+- 平均最终误差：16.33 mm；
+- 目标停止阈值：25 mm；
+- 执行轨迹长度：7.179 m；
+- 定性观察：机器人成功从障碍物上方绕行，车身和轮子未再贴近或碰撞障碍物；
+- 解释：更大的障碍物安全膨胀半径和更密集的中间航点显著提升了执行安全性。
+
+生成文件：
+
+`~/semantic_nav_ws/outputs/exp014_astar_planning_v1/`
+
+`~/semantic_nav_ws/outputs/exp014_astar_planning_v2/`
+
+`~/semantic_nav_ws/outputs/exp014_astar_execution_v1/`
+
+`~/semantic_nav_ws/outputs/exp014_astar_execution_v2/`
+
+`~/semantic_nav_ws/outputs/exp014_astar_comparison_v1/summary/exp014_v1_v2_route_comparison.png`
+
+`~/semantic_nav_ws/outputs/exp014_astar_comparison_v1/summary/exp014_v1_v2_error_comparison.png`
+
+结论：
+
+通过。
+
+EXP-014 证明了：仅使用点机器人 A* 和过度简化航点时，虽然最终点误差可以达标，但实际车身仍可能贴近或碰撞障碍物；在加入更大的障碍物安全膨胀半径并保留更多中间航点后，机器人能够在已知静态障碍物地图下安全完成绕行路线。
+
+当前系统仍属于“已知地图 + 离线路径规划 + 航点跟踪”，尚未实现基于 LiDAR / Camera 的在线障碍物检测、动态避障或 Nav2 风格的实时重规划。
+
+---
+
 ## 十三、当前能力
 
 - [完成] WSL2 + Ubuntu 22.04.5 开发环境；
@@ -1055,6 +1151,7 @@ CSV 记录字段：
 - [完成] CSV 驱动的固定 odometry 坐标多航点路线；
 - [完成] 自定义静态障碍物 Gazebo world；
 - [完成] 静态障碍物场景下的预定义绕行路线；
+- [完成] 已知静态障碍物地图下的 A* 路径规划与安全膨胀绕行；
 - [完成] 轨迹 CSV、航点汇总 CSV、误差图与路线图输出。
 
 ---
@@ -1064,8 +1161,8 @@ CSV 记录字段：
 1. ROS-Gazebo bridge 在当前 WSL 环境中的跨终端发现仍不稳定；
 2. 当前稳定控制路径使用 Gazebo Transport，尚未改造成 ROS 2 原生 `rclcpp` 控制节点；
 3. 当前路线目标使用 `vehicle_blue/odom` 固定坐标系；仿真重启后 odom 原点会重置，尚未接入全局地图或定位系统；
-4. 静态障碍物实验使用预定义绕行航点，尚未实现基于传感器的障碍物检测；
-5. 尚未实现 A*、Dijkstra、Nav2 等自动路径搜索与在线重规划；
+4. 当前避障仍基于已知静态障碍物地图和安全膨胀，尚未实现基于传感器的在线障碍物检测；
+5. 已实现基础 A* 离线路径规划，但尚未接入 Nav2、costmap、动态障碍物处理或在线重规划；
 6. 尚未接入 LiDAR、深度相机、视觉感知或多模态传感器；
 7. 尚未实现语言指令解析、场景语义理解或 VLA 决策模块。
 

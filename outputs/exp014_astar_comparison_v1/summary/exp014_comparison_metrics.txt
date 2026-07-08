@@ -1,0 +1,22 @@
+EXP-014 A* static-obstacle detour comparison
+
+V1 result:
+- controller waypoints: 2
+- success rate: 2 / 2
+- max final error: 24.46 mm
+- average final error: 18.69 mm
+- executed trajectory length: 6.051 m
+- qualitative observation: endpoint tracking succeeded, but the robot body / wheels passed too close to the obstacle.
+- interpretation: point-robot A* plus over-simplified waypoints was insufficient for safe execution.
+
+V2 result:
+- controller waypoints: 9
+- success rate: 9 / 9
+- max final error: 22.10 mm
+- average final error: 16.33 mm
+- executed trajectory length: 7.179 m
+- qualitative observation: the robot safely detoured around the static obstacle without visible contact.
+- interpretation: larger obstacle inflation and denser intermediate waypoints improved execution safety.
+
+route comparison figure: /home/openclaw/semantic_nav_ws/outputs/exp014_astar_comparison_v1/summary/exp014_v1_v2_route_comparison.png
+error comparison figure: /home/openclaw/semantic_nav_ws/outputs/exp014_astar_comparison_v1/summary/exp014_v1_v2_error_comparison.png
