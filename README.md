@@ -14,6 +14,7 @@ The project implements odometry-based motion control for a differential-drive mo
 - Relative point-to-point navigation
 - CSV trajectory logging and Python visualization
 - Six-case continuous relative-navigation benchmark
+- Known-map A* obstacle detour planning with safety inflation and waypoint execution
 
 ## Technical Stack
 
@@ -291,13 +292,43 @@ automatic path search, online replanning, or autonomous collision avoidance.
 
 <!-- EXP013_END -->
 
+## EXP-014: A* Known-Map Obstacle Detour Planning
+
+EXP-014 extends the static-obstacle experiment from hand-written detour waypoints to a simple known-map A* planning pipeline.
+
+The experiment first treats the robot as a point and generates a short A* route around the known obstacle. Although V1 reaches the target numerically, the robot body and wheels pass too close to the obstacle in simulation. V2 increases the obstacle safety inflation radius and keeps more intermediate waypoints, producing a safer executable route.
+
+### Key Result
+
+| Version | Controller waypoints | Success rate | Max final error | Qualitative result |
+|---|---:|---:|---:|---|
+| V1 | 2 | 2 / 2 | 24.46 mm | Reached target, but passed too close to the obstacle |
+| V2 | 9 | 9 / 9 | 22.10 mm | Safely detoured around the obstacle |
+
+V2 stays within the 25 mm waypoint tolerance while avoiding visible contact with the obstacle.
+
+### Route Comparison
+
+![EXP-014 route comparison](outputs/exp014_astar_comparison_v1/summary/exp014_v1_v2_route_comparison.png)
+
+### Final Error Comparison
+
+![EXP-014 final error comparison](outputs/exp014_astar_comparison_v1/summary/exp014_v1_v2_error_comparison.png)
+
+### Interpretation
+
+EXP-014 shows that endpoint accuracy alone is not enough for safe navigation. A point-robot A* plan can satisfy final waypoint error thresholds but still be unsafe for a real robot body. Adding obstacle inflation and denser intermediate waypoints improves execution safety in the Gazebo static-obstacle scene.
+
+Current scope: known static map, offline A* planning, and odom-frame waypoint tracking. It does not yet include online sensing, dynamic obstacle avoidance, costmap-based planning, or Nav2 integration.
+
+
 ## Current Limitations and Next Steps
 
 The current benchmark is a continuous relative-navigation test, meaning that each case starts from the previous case's final pose. Future work includes:
 
 - independent repeated trials from fixed initial poses
 - waypoint-sequence navigation
-- obstacle maps and collision-aware planning
+- online obstacle sensing, costmap-based planning, and dynamic collision avoidance
 - integration with ROS 2 navigation tools
 - visual perception and semantic navigation
 - simulation-to-real transfer to wheeled robot platforms
