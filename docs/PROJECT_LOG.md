@@ -910,21 +910,23 @@ CSV 记录字段：
 
 ---
 
-### EXP-012：CSV 驱动的全局坐标多航点路线执行
+---
+
+### EXP-012：CSV 驱动的固定 Odom 坐标多航点路线执行
 
 实验目标：
 
-- 从 CSV 路线文件读取固定世界坐标航点；
-- 在单个 C++ 控制器进程中连续执行整条全局路线；
+- 从 CSV 路线文件读取固定 `vehicle_blue/odom` 坐标系航点；
+- 在单个 C++ 控制器进程中连续执行整条航点路线；
 - 基于 odometry 的 x、y 和 yaw 反馈完成转向、前进、朝向修正和停车；
-- 输出统一的全局轨迹 CSV、航点汇总 CSV、路线图和误差图；
-- 验证控制器在全局坐标航点序列中的稳定性。
+- 输出统一轨迹 CSV、航点汇总 CSV、路线图和误差图；
+- 验证控制器在固定 odometry 坐标航点序列中的稳定性。
 
 路线文件：
 
 `~/semantic_nav_ws/routes/exp012_global_rectangle.csv`
 
-全局路线控制器：
+路线控制器：
 
 `~/semantic_nav_ws/tools/drive_blue_global_route.cpp`
 
@@ -932,9 +934,33 @@ CSV 记录字段：
 
 ```bash
 ~/semantic_nav_ws/tools/drive_blue_global_route \
-~/semantic_nav_ws/routes/exp012_global_rectangle.csv \
-~/semantic_nav_ws/outputs/exp012_global_rectangle_v1
+  ~/semantic_nav_ws/routes/exp012_global_rectangle.csv \
+  ~/semantic_nav_ws/outputs/exp012_global_rectangle_v1
 ```
+
+实验结果：
+
+| 航点 | Odom 坐标目标 | 最终误差 | 执行时长 | 状态 |
+|---|---:|---:|---:|---|
+| wp01_north | (0.70, 1.00) | 3.55 mm | 9.00 s | success |
+| wp02_west | (0.35, 1.00) | 9.26 mm | 10.46 s | success |
+| wp03_south | (0.35, 0.65) | 7.91 mm | 10.45 s | success |
+| wp04_east | (0.70, 0.65) | 13.74 mm | 10.47 s | success |
+
+汇总指标：
+
+- 航点成功率：4 / 4；
+- 平均最终误差：8.62 mm；
+- 最大最终误差：13.74 mm；
+- 目标停止阈值：25 mm；
+- 总执行时间：40.39 s。
+
+结论：
+
+通过。
+
+本实验实现了 CSV 驱动的固定 odometry 坐标多航点路线执行。
+注意：路线坐标使用 `vehicle_blue/odom`，不是 Gazebo 的绝对 world 坐标。
 
 ---
 
@@ -981,19 +1007,8 @@ CSV 记录字段：
 控制器调整记录：
 
 - 首次运行中，第二段横向路径较长，在原有单航点 `35 s` 安全超时限制下未能完成；
-- 控制器保留安全超时机制，并将单航点超时调整为 `70 s`；
+- 保留安全超时机制，并将单航点超时调整为 `70 s`；
 - 调整后重新启动仿真世界并执行完整路线。
-
-结果目录：
-
-`~/semantic_nav_ws/outputs/exp013_static_obstacle_detour_v1/`
-
-核心输出文件：
-
-- `global_route_summary.csv`：各航点最终误差、执行时长和状态；
-- `summary/obstacle_detour_route_overview.png`：带静态障碍物区域的固定 odometry 坐标路线图；
-- `summary/obstacle_detour_error_comparison.png`：各航点最终误差与 25 mm 停止阈值对比图；
-- `summary/obstacle_detour_metrics.txt`：整体指标汇总。
 
 实验结果：
 
@@ -1009,7 +1024,7 @@ CSV 记录字段：
 - 平均最终误差：21.60 mm；
 - 最大最终误差：23.23 mm；
 - 目标停止阈值：25 mm；
-- 总执行时间：95.57 s；
+- 总执行时间：95.73 s；
 - 所有航点均进入停止阈值并完成稳定停车。
 
 结论：
@@ -1021,8 +1036,26 @@ CSV 记录字段：
 先从障碍物上方绕行，再到达其右侧目标区域。
 
 本实验属于“静态障碍物场景下的预定义绕行路线执行”。
-当前系统尚未实现障碍物感知、自动路径搜索、在线重规划或自主避障；
-后续可在此基础上加入栅格地图、A* 路径规划、LiDAR 感知或 Nav2。
+当前系统尚未实现障碍物感知、自动路径搜索、在线重规划或自主避障。
+
+---
+
+## 十三、当前能力
+
+- [完成] WSL2 + Ubuntu 22.04.5 开发环境；
+- [完成] ROS 2 Humble 基础发布订阅通信；
+- [完成] Gazebo Fortress 差速车仿真；
+- [完成] Gazebo Transport 直接速度控制；
+- [完成] C++ 持久 Publisher 与可靠停车；
+- [完成] odometry 的 x、y、quaternion 与 yaw 读取；
+- [完成] 闭环距离控制与比例减速；
+- [完成] 基于 yaw 的闭环左转和右转；
+- [完成] 相对坐标单点导航；
+- [完成] 连续相对航点路线执行与轨迹可视化；
+- [完成] CSV 驱动的固定 odometry 坐标多航点路线；
+- [完成] 自定义静态障碍物 Gazebo world；
+- [完成] 静态障碍物场景下的预定义绕行路线；
+- [完成] 轨迹 CSV、航点汇总 CSV、误差图与路线图输出。
 
 ---
 
@@ -1038,31 +1071,9 @@ CSV 记录字段：
 
 ---
 
-## 十五、当前能力
+## 十五、常用复现命令
 
-```text
-
-[完成] WSL2 + Ubuntu 22.04.5 开发环境；
-[完成] ROS 2 Humble 基础发布订阅通信；
-[完成] Gazebo Fortress 差速车仿真；
-[完成] Gazebo Transport 直接速度控制；
-[完成] C++ 持久 Publisher 与可靠停车；
-[完成] odometry 的 x、y、quaternion 与 yaw 读取；
-[完成] 闭环距离控制与比例减速；
-[完成] 基于 yaw 的闭环左转和右转；
-[完成] 相对坐标单点导航；
-[完成] 连续相对航点路线执行与轨迹可视化；
-[完成] CSV 驱动的固定 odometry 坐标多航点路线；
-[完成] 自定义静态障碍物 Gazebo world；
-[完成] 静态障碍物场景下的预定义绕行路线；
-[完成] 轨迹 CSV、航点汇总 CSV、误差图与路线图输出。
-```
-
----
-
-## 十六、常用复现命令
-
-启动 Gazebo：
+### 启动基础差速车世界
 
 ```bash
 source /opt/ros/humble/setup.bash
@@ -1070,7 +1081,17 @@ export LIBGL_ALWAYS_SOFTWARE=1
 ros2 launch ros_gz_sim_demos diff_drive.launch.py rviz:=false
 ```
 
-基础控制：
+### 启动 EXP-013 静态障碍物世界
+
+```bash
+source /opt/ros/humble/setup.bash
+export LIBGL_ALWAYS_SOFTWARE=1
+
+ros2 launch ros_gz_sim gz_sim.launch.py \
+  gz_args:="-r /home/openclaw/semantic_nav_ws/worlds/exp013_obstacle_world.sdf"
+```
+
+### 基础控制
 
 ```bash
 ~/semantic_nav_ws/tools/drive_blue_cpp forward
@@ -1080,26 +1101,42 @@ ros2 launch ros_gz_sim_demos diff_drive.launch.py rviz:=false
 ~/semantic_nav_ws/tools/drive_blue_cpp stop
 ```
 
-高精度距离控制：
+### 高精度距离控制
 
 ```bash
 ~/semantic_nav_ws/tools/drive_blue_distance_slow 0.50
 ```
 
-查看 odometry：
+### 查看 odometry
 
 ```bash
 ign topic -e -t /model/vehicle_blue/odometry
 ```
 
+### 执行 EXP-012 固定 Odom 坐标路线
+
+```bash
+~/semantic_nav_ws/tools/drive_blue_global_route \
+  ~/semantic_nav_ws/routes/exp012_global_rectangle.csv \
+  ~/semantic_nav_ws/outputs/exp012_global_rectangle_v1
+```
+
+### 执行 EXP-013 静态障碍物绕行路线
+
+```bash
+~/semantic_nav_ws/tools/drive_blue_global_route \
+  ~/semantic_nav_ws/routes/exp013_static_obstacle_detour.csv \
+  ~/semantic_nav_ws/outputs/exp013_static_obstacle_detour_v1
+```
+
 ---
 
-## 十七、未来新增实验记录模板
+## 十六、未来新增实验记录模板
 
-```markdown
 ### EXP-XXX：实验名称
 
 目标：
+
 - 本次要验证什么？
 
 运行命令：
@@ -1109,27 +1146,33 @@ ign topic -e -t /model/vehicle_blue/odometry
 ```
 
 关键参数：
+
 - 参数 1：
 - 参数 2：
 
 预期结果：
+
 - 预期机器人会怎样运动？
 
 实际结果：
+
 - 实际发生了什么？
 
 指标：
+
 - 目标值：
 - 实际值：
 - 绝对误差：
 - 相对误差：
 
 问题：
+
 - 遇到了什么异常？
 
 解决方式：
+
 - 改了什么，为什么改？
 
 结论：
+
 - 通过 / 部分通过 / 未通过
-```
