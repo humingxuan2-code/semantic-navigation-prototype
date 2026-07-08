@@ -15,6 +15,7 @@ The project implements odometry-based motion control for a differential-drive mo
 - CSV trajectory logging and Python visualization
 - Six-case continuous relative-navigation benchmark
 - Known-map A* obstacle detour planning with safety inflation and waypoint execution
+- Pose goal navigation with final yaw alignment
 
 ## Technical Stack
 
@@ -320,6 +321,43 @@ V2 stays within the 25 mm waypoint tolerance while avoiding visible contact with
 EXP-014 shows that endpoint accuracy alone is not enough for safe navigation. A point-robot A* plan can satisfy final waypoint error thresholds but still be unsafe for a real robot body. Adding obstacle inflation and denser intermediate waypoints improves execution safety in the Gazebo static-obstacle scene.
 
 Current scope: known static map, offline A* planning, and odom-frame waypoint tracking. It does not yet include online sensing, dynamic obstacle avoidance, costmap-based planning, or Nav2 integration.
+
+
+## EXP-015: Pose Goal Navigation with Final Yaw Alignment
+
+EXP-015 extends waypoint navigation from position-only goals to pose goals. Each waypoint contains `target_x`, `target_y`, and `target_yaw_deg`. The controller first drives the robot to the target position, then performs an in-place final yaw alignment.
+
+### Key Result
+
+| Metric | Result |
+|---|---:|
+| Success rate | 9 / 9 |
+| Max final position error | 19.90 mm |
+| Average final position error | 11.86 mm |
+| Max final yaw error | 2.21 deg |
+| Average final yaw error | 0.61 deg |
+| Total execution time | 105.16 s |
+
+Final pose goal:
+
+| Item | x | y | yaw |
+|---|---:|---:|---:|
+| Target | 5.800 | 2.000 | 0.00 deg |
+| Actual | 5.797 | 2.003 | 1.15 deg |
+
+The final goal reached 4.47 mm position error and 1.15 deg yaw error, staying within the 25 mm position tolerance and 3 deg yaw tolerance.
+
+### Pose Route Overview
+
+![EXP-015 pose goal route overview](outputs/exp015_pose_goal_v1/summary/pose_goal_route_overview.png)
+
+### Position and Yaw Error Summary
+
+![EXP-015 pose goal error summary](outputs/exp015_pose_goal_v1/summary/pose_goal_error_summary.png)
+
+### Interpretation
+
+This experiment validates pose goal execution in the obstacle world: the robot can reach a target position and then align its final heading. It does not target lane-change or overtaking-style return-to-lane behavior; the goal is general mobile robot pose navigation.
 
 
 ## Current Limitations and Next Steps

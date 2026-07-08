@@ -1,0 +1,17 @@
+EXP-015 Pose Goal Navigation Summary
+
+success rate: 9 / 9
+max final position error: 19.90 mm
+average final position error: 11.86 mm
+max absolute final yaw error: 2.21 deg
+average absolute final yaw error: 0.61 deg
+total execution time: 105.16 s
+
+final pose goal:
+- target: x=5.800, y=2.000, yaw=0.00 deg
+- actual: x=5.797, y=2.003, yaw=1.15 deg
+- final position error: 4.47 mm
+- final yaw error: 1.15 deg
+
+route overview figure: /home/openclaw/semantic_nav_ws/outputs/exp015_pose_goal_v1/summary/pose_goal_route_overview.png
+error summary figure: /home/openclaw/semantic_nav_ws/outputs/exp015_pose_goal_v1/summary/pose_goal_error_summary.png

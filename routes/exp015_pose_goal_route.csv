@@ -1,0 +1,10 @@
+waypoint_name,target_x,target_y,target_yaw_deg
+pose_wp01_clear_obstacle,0.70,0.80,45
+pose_wp02_pass_upper,1.30,1.60,45
+pose_wp03_upper_lane,1.50,2.30,0
+pose_wp04_upper_lane,2.30,2.30,0
+pose_wp05_upper_lane,3.10,2.30,0
+pose_wp06_upper_lane,3.90,2.30,0
+pose_wp07_upper_lane,4.70,2.30,0
+pose_wp08_above_goal,5.50,2.30,-90
+pose_goal_final_yaw,5.80,2.00,0
