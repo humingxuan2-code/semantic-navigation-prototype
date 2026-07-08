@@ -16,6 +16,7 @@ The project implements odometry-based motion control for a differential-drive mo
 - Six-case continuous relative-navigation benchmark
 - Known-map A* obstacle detour planning with safety inflation and waypoint execution
 - Pose goal navigation with final yaw alignment
+- Footprint-based trajectory safety evaluation
 
 ## Technical Stack
 
@@ -358,6 +359,29 @@ The final goal reached 4.47 mm position error and 1.15 deg yaw error, staying wi
 ### Interpretation
 
 This experiment validates pose goal execution in the obstacle world: the robot can reach a target position and then align its final heading. It does not target lane-change or overtaking-style return-to-lane behavior; the goal is general mobile robot pose navigation.
+
+
+## EXP-016: Footprint-Based Trajectory Safety Evaluation
+
+EXP-016 evaluates trajectory safety using a conservative rectangular robot footprint instead of relying only on final waypoint error. This directly addresses the issue observed in EXP-014-v1: the robot could numerically reach the target while still passing too close to the obstacle.
+
+### Key Result
+
+| Experiment | Path length | Minimum footprint-obstacle clearance | Collision / overlap samples | Status |
+|---|---:|---:|---:|---|
+| EXP-014-v1 point A* | 6.051 m | 0.00 mm | 266 | collision_risk |
+| EXP-014-v2 inflated A* | 7.179 m | 556.88 mm | 0 | safe |
+| EXP-015 pose goal | 7.208 m | 554.26 mm | 0 | safe |
+
+The evaluation shows that endpoint tracking alone is not sufficient for safe navigation. EXP-014-v1 reached its targets but produced footprint overlap with the obstacle. EXP-014-v2 and EXP-015 remained collision-free under the footprint-based safety check.
+
+### Footprint Safety Comparison
+
+![EXP-016 footprint safety comparison](outputs/exp016_footprint_safety_v1/summary/footprint_safety_comparison.png)
+
+### Interpretation
+
+This experiment adds an offline safety layer to the project. It quantifies whether the executed trajectory is physically safe for the robot body, not just whether the final waypoint error is small. The current method is an offline post-run analysis and does not yet include online collision checking, costmap updates, dynamic obstacles, or real-time replanning.
 
 
 ## Current Limitations and Next Steps

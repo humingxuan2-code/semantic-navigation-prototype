@@ -1,0 +1,30 @@
+EXP-016 Footprint-Based Trajectory Safety Evaluation
+
+robot footprint length: 2.20 m
+robot footprint width: 1.80 m
+obstacle center in odom frame: (3.5, 0.0)
+obstacle size: (1.4, 1.6)
+
+exp014_v1_point_astar
+- trajectory points: 942
+- path length: 6.051 m
+- minimum footprint-obstacle clearance: 0.00 mm
+- collision / overlap samples: 266
+- status: collision_risk
+
+exp014_v2_inflated_astar
+- trajectory points: 1523
+- path length: 7.179 m
+- minimum footprint-obstacle clearance: 556.88 mm
+- collision / overlap samples: 0
+- status: safe
+
+exp015_pose_goal
+- trajectory points: 778
+- path length: 7.208 m
+- minimum footprint-obstacle clearance: 554.26 mm
+- collision / overlap samples: 0
+- status: safe
+
+summary csv: /home/openclaw/semantic_nav_ws/outputs/exp016_footprint_safety_v1/footprint_safety_summary.csv
+comparison figure: /home/openclaw/semantic_nav_ws/outputs/exp016_footprint_safety_v1/summary/footprint_safety_comparison.png

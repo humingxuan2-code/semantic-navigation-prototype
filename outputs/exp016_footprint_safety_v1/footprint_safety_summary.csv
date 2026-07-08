@@ -1,0 +1,4 @@
+experiment,trajectory_points,path_length_m,min_clearance_m,min_clearance_mm,collision_or_overlap_samples,status,trajectory_file
+exp014_v1_point_astar,942,6.050706320800004,0.0,0.0,266,collision_risk,/home/openclaw/semantic_nav_ws/outputs/exp014_astar_execution_v1/global_route_trajectory.csv
+exp014_v2_inflated_astar,1523,7.178613366255111,0.556883233222837,556.8832332228369,0,safe,/home/openclaw/semantic_nav_ws/outputs/exp014_astar_execution_v2/global_route_trajectory.csv
+exp015_pose_goal,778,7.208383336225537,0.5542603970813282,554.2603970813283,0,safe,/home/openclaw/semantic_nav_ws/outputs/exp015_pose_goal_v1/pose_route_trajectory.csv
