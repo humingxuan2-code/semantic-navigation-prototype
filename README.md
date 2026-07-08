@@ -17,6 +17,7 @@ The project implements odometry-based motion control for a differential-drive mo
 - Known-map A* obstacle detour planning with safety inflation and waypoint execution
 - Pose goal navigation with final yaw alignment
 - Footprint-based trajectory safety evaluation
+- Online footprint safety guard with automatic safety stop
 
 ## Technical Stack
 
@@ -382,6 +383,32 @@ The evaluation shows that endpoint tracking alone is not sufficient for safe nav
 ### Interpretation
 
 This experiment adds an offline safety layer to the project. It quantifies whether the executed trajectory is physically safe for the robot body, not just whether the final waypoint error is small. The current method is an offline post-run analysis and does not yet include online collision checking, costmap updates, dynamic obstacles, or real-time replanning.
+
+
+## EXP-017: Online Footprint Safety Guard
+
+EXP-017 extends the footprint safety analysis from offline evaluation to an online safety guard. During route execution, the controller continuously estimates the robot footprint clearance to the known static obstacle. If the clearance drops below the configured threshold, the robot stops before continuing into an unsafe trajectory.
+
+### Key Result
+
+| Metric | Result |
+|---|---:|
+| Status | safety_stop |
+| Safety stop threshold | 0.250 m |
+| Minimum footprint clearance | 0.164 m |
+| Minimum footprint clearance | 163.76 mm |
+| Remaining waypoint error at stop | 1.055 m |
+| Duration before stop | 13.08 s |
+
+The safety guard was tested on the unsafe EXP-014-v1 route. Instead of completing the route and risking footprint overlap, the controller stopped when the footprint clearance dropped below the threshold.
+
+### Safety Guard Stop Overview
+
+![EXP-017 safety guard stop overview](outputs/exp017_safety_guard_v1/summary/safety_guard_stop_overview.png)
+
+### Interpretation
+
+This experiment validates online safety-stop behavior. It does not yet perform automatic obstacle avoidance or replanning. The controller can detect that the current route is becoming unsafe and stop the robot, but it does not generate a new safe path by itself.
 
 
 ## Current Limitations and Next Steps

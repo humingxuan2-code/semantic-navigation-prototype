@@ -1264,6 +1264,59 @@ EXP-016 证明了最终航点误差并不足以单独判断导航实验是否安
 
 ---
 
+### EXP-017：在线 Footprint Safety Guard 安全保护停车
+
+实验目标：
+
+- 在 EXP-016 离线 footprint 安全评估基础上，加入在线安全保护逻辑；
+- 执行路线过程中持续计算机器人 footprint 与静态障碍物之间的距离；
+- 当 footprint clearance 低于安全阈值时，立即停止机器人；
+- 使用 EXP-014-v1 的不安全 A* 路线验证安全停车机制；
+- 明确本实验验证的是在线 safety-stop，不是自动避障或在线重规划。
+
+安全控制器：
+
+`~/semantic_nav_ws/tools/drive_blue_global_route_safety.cpp`
+
+测试路线：
+
+`~/semantic_nav_ws/routes/exp014_astar_obstacle_detour.csv`
+
+执行输出目录：
+
+`~/semantic_nav_ws/outputs/exp017_safety_guard_v1/`
+
+实验结果：
+
+| 指标 | 结果 |
+|---|---:|
+| 执行状态 | safety_stop |
+| 安全停车阈值 | 0.250 m |
+| 最小 footprint clearance | 0.164 m |
+| 最小 footprint clearance | 163.76 mm |
+| 安全停车时距离当前航点误差 | 1.055 m |
+| 触发停车用时 | 13.08 s |
+
+生成文件：
+
+`~/semantic_nav_ws/outputs/exp017_safety_guard_v1/safety_route_summary.csv`
+
+`~/semantic_nav_ws/outputs/exp017_safety_guard_v1/safety_route_trajectory.csv`
+
+`~/semantic_nav_ws/outputs/exp017_safety_guard_v1/summary/safety_guard_stop_overview.png`
+
+`~/semantic_nav_ws/outputs/exp017_safety_guard_v1/summary/safety_guard_metrics.txt`
+
+结论：
+
+通过。
+
+EXP-017 证明了当前系统已经可以从离线安全评估进一步扩展到在线安全保护：当机器人执行 EXP-014-v1 这类存在碰撞风险的路线时，控制器能够在 footprint clearance 低于 0.25 m 阈值后主动停车，避免继续执行不安全轨迹。
+
+当前 safety guard 只会触发停车，不会自动生成绕行路线，也尚未接入 costmap、动态障碍物检测或实时重规划。
+
+---
+
 ## 十三、当前能力
 
 - [完成] WSL2 + Ubuntu 22.04.5 开发环境；
@@ -1282,6 +1335,7 @@ EXP-016 证明了最终航点误差并不足以单独判断导航实验是否安
 - [完成] 已知静态障碍物地图下的 A* 路径规划与安全膨胀绕行；
 - [完成] Pose goal navigation：目标点位置到达与最终 yaw 朝向对齐；
 - [完成] 基于机器人 footprint 的离线轨迹安全评估与碰撞风险判定；
+- [完成] 在线 footprint safety guard：低安全距离时主动停车；
 - [完成] 轨迹 CSV、航点汇总 CSV、误差图与路线图输出。
 
 ---
@@ -1291,7 +1345,7 @@ EXP-016 证明了最终航点误差并不足以单独判断导航实验是否安
 1. ROS-Gazebo bridge 在当前 WSL 环境中的跨终端发现仍不稳定；
 2. 当前稳定控制路径使用 Gazebo Transport，尚未改造成 ROS 2 原生 `rclcpp` 控制节点；
 3. 当前路线目标使用 `vehicle_blue/odom` 固定坐标系；仿真重启后 odom 原点会重置，尚未接入全局地图或定位系统；
-4. 当前已能进行离线 footprint 轨迹安全评估，但尚未实现在线碰撞检测、costmap 或传感器驱动的实时避障；
+4. 当前已实现离线 footprint 安全评估和在线 safety-stop，但尚未实现自动绕行、costmap 或传感器驱动的实时重规划；
 5. 已实现基础 A* 离线路径规划，但尚未接入 Nav2、costmap、动态障碍物处理或在线重规划；
 6. 尚未接入 LiDAR、深度相机、视觉感知或多模态传感器；
 7. 已实现固定 odometry 坐标系下的 pose goal execution，但尚未接入全局定位、语义目标、语言指令解析或 VLA 决策模块。

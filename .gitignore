@@ -33,3 +33,5 @@ outputs/exp012_global_rectangle_v1/terminal_output.txt
 worlds/*.bak
 outputs/exp013_static_obstacle_detour_v1/global_route_trajectory.csv
 outputs/exp013_static_obstacle_detour_v1/terminal_output.txt
+tools/drive_blue_pose_route
+tools/drive_blue_global_route_safety

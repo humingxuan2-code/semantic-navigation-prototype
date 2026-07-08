@@ -1,0 +1,16 @@
+EXP-017 Online Footprint Safety Guard Summary
+
+status: safety_stop
+safety stop threshold: 0.250 m
+minimum footprint clearance: 0.164 m
+minimum footprint clearance: 163.76 mm
+remaining final waypoint error at stop: 1.055 m
+duration before stop: 13.08 s
+
+interpretation:
+- The original EXP-014-v1 route was unsafe for the robot footprint.
+- The online safety guard detected that footprint clearance dropped below the configured threshold.
+- The controller stopped before completing the waypoint route, preventing the unsafe trajectory from continuing.
+- This validates online safety-stop behavior, not full obstacle avoidance or replanning.
+
+overview figure: /home/openclaw/semantic_nav_ws/outputs/exp017_safety_guard_v1/summary/safety_guard_stop_overview.png

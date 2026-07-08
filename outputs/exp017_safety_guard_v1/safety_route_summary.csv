@@ -1,0 +1,2 @@
+waypoint_name,target_x,target_y,start_x,start_y,end_x,end_y,final_error_m,min_clearance_m,min_clearance_mm,duration_sec,status
+astar_wp01,2.1,1.6,4.2352e-18,1.06798e-37,1.25604,0.967479,1.05468,0.163765,163.765,13.0786,safety_stop
